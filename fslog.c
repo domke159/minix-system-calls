@@ -175,8 +175,7 @@ int do_getfslog() {
  */
 void logfserr(int opcode, int result, char *path) {
     if (fsloginf.ops2log & FSOP_ERR)
-        logfsop(opcode, result, path, UNKNOWN_FD_NR, UNKNOWN_MODE,
-            UNKNOWN_SIZE);
+        logfsop(opcode, result, path, UNKNOWN_FD_NR, UNKNOWN_MODE, UNKNOWN_SIZE);
 }
 
 /* 
@@ -194,10 +193,8 @@ void logfserr_nopath(int opcode, int result) {
  *
  * see fslog.h for specification of this logging function 
  */
-void logfsop(int opcode, int result, char *path, int fd_nr, mode_t omode, 
-    off_t size) {
-    if (path && fd_nr == EVENTS_FD_NR 
-            && strncmp(EVENTS_PATH, path, PATH_MAX) == 0)
+void logfsop(int opcode, int result, char *path, int fd_nr, mode_t omode, off_t size) {
+    if (path && fd_nr == EVENTS_FD_NR && strncmp(EVENTS_PATH, path, PATH_MAX) == 0)
         return;     // system events operation that is ignored
         
     if (fp->fp_name && strncmp(fp->fp_name, DEVMAN_NAME, PROC_NAME_LEN) == 0)
@@ -257,8 +254,7 @@ void logfsop(int opcode, int result, char *path, int fd_nr, mode_t omode,
  * logfsop_nopath: implemented, do NOT change
  * see fslog.h for specification of this logging function 
  */
-void logfsop_nopath(int opcode, int result, int fd_nr, mode_t omode,
-    off_t size) {
+void logfsop_nopath(int opcode, int result, int fd_nr, mode_t omode, off_t size) {
     logfsop(opcode, result, NULL, fd_nr, omode, size);
 }
 

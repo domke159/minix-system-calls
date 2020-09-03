@@ -83,8 +83,7 @@ int do_link()
 	r = forbidden(fp, dirp, W_BIT | X_BIT);
 
   if (r == OK)
-	r = req_link(vp->v_fs_e, dirp->v_inode_nr, fullpath,
-		     vp->v_inode_nr);
+	r = req_link(vp->v_fs_e, dirp->v_inode_nr, fullpath, vp->v_inode_nr);
 
   unlock_vnode(vp);
   unlock_vnode(dirp);
@@ -125,10 +124,10 @@ int do_unlink()
 	/* Direct copy failed, try fetching from user space */
 
 	if (fetch_name(vname, vname_length, fullpath) != OK) {
-  /* CSC2025 mod start */
-  logfserr_nopath(opcode, err_code);
-  /* CSC2025 mod end */
-	return(err_code);
+  		/* CSC2025 mod start */
+  		logfserr_nopath(opcode, err_code);
+  		/* CSC2025 mod end */
+		return(err_code);
 	}
   }
 
@@ -139,10 +138,10 @@ int do_unlink()
   /* Get the last directory in the path. */
 
   if ((dirp = last_dir(&resolve, fp)) == NULL) {
-  /* CSC2025 mod start */
-  logfserr(opcode, err_code, fullpath);
-  /* CSC2025 mod end */
-  return(err_code);
+  	/* CSC2025 mod start */
+  	logfserr(opcode, err_code, fullpath);
+  	/* CSC2025 mod end */
+  	return(err_code);
   } 
 
 
@@ -151,9 +150,9 @@ int do_unlink()
 	unlock_vnode(dirp);
 	unlock_vmnt(vmp);
 	put_vnode(dirp);
-  /* CSC2025 mod start */
-  logfserr(opcode, ENOTDIR, fullpath);
-  /* CSC2025 mod end */
+  	/* CSC2025 mod start */
+  	logfserr(opcode, ENOTDIR, fullpath);
+  	/* CSC2025 mod end */
 	return(ENOTDIR);
   }
 
@@ -162,9 +161,9 @@ int do_unlink()
 	unlock_vnode(dirp);
 	unlock_vmnt(vmp);
 	put_vnode(dirp);
-  /* CSC2025 mod start */
-  logfserr(opcode, r, fullpath);
-  /* CSC2025 mod end */
+  	/* CSC2025 mod start */
+  	logfserr(opcode, r, fullpath);
+  	/* CSC2025 mod end */
 	return(r);
   }
 
@@ -188,9 +187,9 @@ int do_unlink()
 		unlock_vnode(dirp);
 		unlock_vmnt(vmp);
 		put_vnode(dirp);
-    /* CSC2025 mod start */
-    logfserr(opcode, r, resolve.l_path);
-    /* CSC2025 mod end */
+    		/* CSC2025 mod start */
+    		logfserr(opcode, r, resolve.l_path);
+    		/* CSC2025 mod end */
 		return(r);
 	}
   }
@@ -302,8 +301,7 @@ int do_rename()
 
   if (r == OK) {
 	upgrade_vmnt_lock(oldvmp); /* Upgrade to exclusive access */
-	r = req_rename(old_dirp->v_fs_e, old_dirp->v_inode_nr, old_name,
-		       new_dirp->v_inode_nr, fullpath);
+	r = req_rename(old_dirp->v_fs_e, old_dirp->v_inode_nr, old_name, new_dirp->v_inode_nr, fullpath);
   }
 
   unlock_vnode(old_dirp);
@@ -459,9 +457,7 @@ int do_slink()
   if (fetch_name(vname2, vname2_length, fullpath) != OK) return(err_code);
   if ((vp = last_dir(&resolve, fp)) == NULL) return(err_code);
   if ((r = forbidden(fp, vp, W_BIT|X_BIT)) == OK) {
-	r = req_slink(vp->v_fs_e, vp->v_inode_nr, fullpath, who_e,
-		      vname1, vname1_length - 1, fp->fp_effuid,
-		      fp->fp_effgid);
+	r = req_slink(vp->v_fs_e, vp->v_inode_nr, fullpath, who_e, vname1, vname1_length - 1, fp->fp_effuid, fp->fp_effgid);
   }
 
   unlock_vnode(vp);

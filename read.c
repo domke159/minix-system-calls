@@ -117,24 +117,24 @@ int rw_flag;			/* READING or WRITING */
   locktype = (rw_flag == READING) ? VNODE_READ : VNODE_WRITE;
 
   if ((f = get_filp(scratch(fp).file.fd_nr, locktype)) == NULL) {
-  /* CSC2025 mod start */
-  logfserr_nopath(opcode, err_code);
-  /* CSC2025 mod end */
-  return(err_code);
+  	/* CSC2025 mod start */
+  	logfserr_nopath(opcode, err_code);
+  	/* CSC2025 mod end */
+  	return(err_code);
   }
 
   if (((f->filp_mode) & (rw_flag == READING ? R_BIT : W_BIT)) == 0) {
 	unlock_filp(f);
-  /* CSC2025 mod start */
-  logfserr_nopath(opcode, f->filp_mode == FILP_CLOSED ? EIO : EBADF);
-  /* CSC2025 mod end */
+  	/* CSC2025 mod start */
+  	logfserr_nopath(opcode, f->filp_mode == FILP_CLOSED ? EIO : EBADF);
+  	/* CSC2025 mod end */
 	return(f->filp_mode == FILP_CLOSED ? EIO : EBADF);
   }
   if (scratch(fp).io.io_nbytes == 0) {
 	unlock_filp(f);
-  /* CSC2025 mod start */
-  logfserr_nopath(opcode, 0);
-  /* CSC2025 mod end */
+  	/* CSC2025 mod start */
+  	logfserr_nopath(opcode, 0);
+  	/* CSC2025 mod end */
 	return(0);	/* so char special files need not check for 0*/
   }
 
@@ -152,8 +152,7 @@ int rw_flag;			/* READING or WRITING */
 /*===========================================================================*
  *				read_write				     *
  *===========================================================================*/
-int read_write(int rw_flag, struct filp *f, char *buf, size_t size,
-		      endpoint_t for_e)
+int read_write(int rw_flag, struct filp *f, char *buf, size_t size, endpoint_t for_e)
 {
   register struct vnode *vp;
   u64_t position, res_pos, new_pos;
@@ -273,9 +272,8 @@ int do_getdents()
 	if (ex64hi(rfilp->filp_pos) != 0)
 		panic("do_getdents: can't handle large offsets");
 
-	r = req_getdents(rfilp->filp_vno->v_fs_e, rfilp->filp_vno->v_inode_nr,
-			 rfilp->filp_pos, scratch(fp).io.io_buffer,
-			 scratch(fp).io.io_nbytes, &new_pos,0);
+	r = req_getdents(rfilp->filp_vno->v_fs_e, rfilp->filp_vno->v_inode_nr, rfilp->filp_pos, scratch(fp).io.io_buffer, 
+	    scratch(fp).io.io_nbytes, &new_pos,0);
 
 	if (r > 0) rfilp->filp_pos = new_pos;
   }
